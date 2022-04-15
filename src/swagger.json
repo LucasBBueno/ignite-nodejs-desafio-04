@@ -1,0 +1,238 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Users management API Documentation",
+        "description": "An api to managage users",
+        "version": "1.0.0",
+        "contact": {
+            "email": "lucas-jbb@hotmail.com"
+        }
+    },
+    "paths": {
+        "/users": {
+            "post": {
+                "tags": ["Users"],
+                "summary": "Create a user",
+                "description": "Create a new user",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "required": true
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "required": true
+                                    }
+                                },
+                                "example": {
+                                    "name": "John Doe",
+                                    "email": "john@example.com"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "User already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "User already exists"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["Users"],
+                "summary": "List all users for a admin user",
+                "description": "List all users for a admin user",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "headers",
+                        "description": "An user_id",
+                        "required": true,
+                        "type": "string",
+                        "example": "3a38078d-1e3c-4f2f-abfa-f690094cfbbb"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/User"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Cannot list users for a no admin user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Cannot list users for a no admin user"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}/admin": {
+            "patch": {
+                "tags": ["Users"],
+                "summary": "Change user to a admin user",
+                "description": "Change user to a admin user",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The user_id for change",
+                        "required": true,
+                        "type": "string",
+                        "example": "3a38078d-1e3c-4f2f-abfa-f690094cfbbb"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully change user to admin",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        } 
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "User not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Find user by user_id",
+                "description": "Find user by user_id",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The user_id to find",
+                        "required": true,
+                        "type": "string",
+                        "example": "3a38078d-1e3c-4f2f-abfa-f690094cfbbb"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Finded user successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example":"User not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "3a38078d-1e3c-4f2f-abfa-f690094cfbbb"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "John@example.com"
+                },
+                "admin": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "2022-04-14T23:13:57.534Z"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2022-04-14T23:13:57.534Z"
+                }
+            }
+        }
+    }
+}
